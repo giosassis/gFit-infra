@@ -13,12 +13,27 @@ resource "aws_security_group" "rds_security_group" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 }
 
 resource "aws_instance" "backend_instance" {
-  ami           = "ami-08a52ddb321b32a8c"
+  ami           = "ami-053b0d53c279acc90" # Substitua pela AMI correta do Ubuntu
   instance_type = "t2.micro"
-  key_name      = "id_rsa_gfit" 
+  key_name      = "id_rsa_gfit"
 
   tags = {
     Name = "BackendInstance"
@@ -26,24 +41,16 @@ resource "aws_instance" "backend_instance" {
 
   user_data = <<-EOF
               #!/bin/bash
-              sudo yum update -y
-              sudo amazon-linux-extras install postgresql11 -y
-              sudo yum install -y git
-              sudo amazon-linux-extras install dotnet-sdk-7 -y
+              sudo apt-get update -y
+              sudo apt-get install -y postgresql
+              sudo apt-get install -y git
+              sudo snap install dotnet-sdk --channel=7/stable --classic
 
-              sudo yum install -y httpd
-              sudo systemctl start httpd
-              sudo systemctl enable httpd
-
-              git clone https://github.com/giosassis/gFit-backend /var/www/html/backend
-
-              # Iniciar o servidor web
-              sudo systemctl restart httpd
               EOF
 
   connection {
     type        = "ssh"
-    user        = "ec2-user"
+    user        = "ubuntu"
     private_key = file("~/.ssh/id_rsa_gfit.pem") # Substitua pelo caminho da sua chave SSH privada
     host        = self.public_ip
   }
