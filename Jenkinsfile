@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'EC2_SSH_KEY', defaultValue: '', description: 'Path to EC2 SSH key')
-        string(name: 'EC2_IP', defaultValue: '', description: 'IP Address of EC2 instance')
+        string(name: 'AWS_ACCESS_KEY_ID', defaultValue: '', description: 'AWS Access Key ID')
+        string(name: 'AWS_SECRET_ACCESS_KEY', defaultValue: '', description: 'AWS Secret Access Key')
     }
 
     environment {
