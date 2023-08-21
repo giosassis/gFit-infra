@@ -28,7 +28,6 @@ pipeline {
         stage('Deploy to S3') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'gfit-user', variable: 'AWS_ACCESS_KEY_ID'),
                     string(credentialsId: 'gfit-user', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
                     sh 'npm run deploy'
