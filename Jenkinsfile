@@ -2,17 +2,19 @@ pipeline {
     agent any
 
     environment {
-        AWS_DEFAULT_REGION = 'us-east-1'  // Defina a região da AWS aqui
+        AWS_DEFAULT_REGION = 'us-east-1'  
     }
 
     stages {
         stage('Checkout') {
             steps {
-                withCredentials([string(credentialsId: 'github-token-credential-id', variable: 'GITHUB_TOKEN')]) {
+                script {
+                    def credentialsId = 'token-credential-id'  
+                    def credentials = credentials(credentialsId)
                     sh '''
                         git config --global user.email "giovana.sant@hotmail.com"
                         git config --global user.name "Giovana Assis"
-                        git remote set-url origin git@github.com:giosassis/gFit-infra
+                        git remote set-url origin git@github.com:giosassis/gfit-infra
                         git fetch --tags --force --progress origin +refs/heads/*:refs/remotes/origin/*
                         git checkout -f ${GIT_COMMIT}
                     '''
