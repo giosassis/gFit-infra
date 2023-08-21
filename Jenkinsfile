@@ -30,6 +30,7 @@ pipeline {
                 withCredentials([
                     string(credentialsId: 'gfit-user', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
+                    tool name: 'AWS CLI', type: 'AWSCLI'
                     sh 'npm run deploy'
                 }
             }
