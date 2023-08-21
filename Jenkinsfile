@@ -4,7 +4,8 @@ pipeline {
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'  
     }
-
+    tools {nodejs "node"}
+    
     stages {
         stage('Checkout') {
             steps {
