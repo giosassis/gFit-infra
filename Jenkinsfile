@@ -12,10 +12,18 @@ pipeline {
                 ])
             }
         }
-        stage('Install Dependencies') {
+        stage('Build') {
             steps {
-                script {
-                    sh 'npm install'
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+        stage('Deploy to S3') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'gfit-user', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    sh 'npm run deploy'
                 }
             }
         }
