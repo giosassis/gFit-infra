@@ -8,7 +8,15 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/seu-usuario/seu-repositorio-frontend.git', branch:'main'
+                withCredentials([string(credentialsId: 'github-token-credential-id', variable: 'GITHUB_TOKEN')]) {
+                    sh '''
+                        git config --global user.email "giovana.sant@hotmail.com"
+                        git config --global user.name "Giovana Assis"
+                        git remote set-url origin git@github.com:giosassis/gFit-infra
+                        git fetch --tags --force --progress origin +refs/heads/*:refs/remotes/origin/*
+                        git checkout -f ${GIT_COMMIT}
+                    '''
+                }
             }
         }
         stage('Build') {
