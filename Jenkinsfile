@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/seu-usuario/seu-repositorio-frontend.git', branch:'main'
+                git url: 'https://github.com/seu-usuario/seu-repositorio-frontend.git', branch:'main'
             }
         }
         stage('Build') {
