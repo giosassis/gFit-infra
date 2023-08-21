@@ -1,14 +1,8 @@
 pipeline {
     agent any
 
-    parameters {
-        string(name: 'AWS_ACCESS_KEY_ID', defaultValue: '', description: 'AWS Access Key ID')
-        string(name: 'AWS_SECRET_ACCESS_KEY', defaultValue: '', description: 'AWS Secret Access Key')
-    }
-
     environment {
-        AWS_ACCESS_KEY_ID = credentials('aws-access-key-id-credential-id')
-        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key-credential-id')
+        AWS_DEFAULT_REGION = 'us-east-1'  // Defina a região da AWS aqui
     }
 
     stages {
@@ -25,8 +19,13 @@ pipeline {
         }
         stage('Deploy to S3') {
             steps {
-                sh 'npm run deploy'
+                withCredentials([
+                    string(credentialsId: 'aws-access-key-id-credential-id', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secret-access-key-credential-id', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    sh 'npm run deploy'
+                }
             }
         }
-    }
+    }   
 }
