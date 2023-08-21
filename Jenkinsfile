@@ -10,15 +10,12 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    def credentialsId = 'token-credential-id'  
+                    def credentialsId = 'token-credential-id'
                     def credentials = credentials(credentialsId)
-                    sh '''
-                        git config --global user.email "giovana.sant@hotmail.com"
-                        git config --global user.name "Giovana Assis"
-                        git remote set-url origin https://github.com/giosassis/gfit-frontend
-                        git fetch --tags --force --progress origin +refs/heads/*:refs/remotes/origin/*
-                        git checkout -f ${GIT_COMMIT}
-                    '''
+                    checkout([$class: 'GitSCM', 
+                            branches: [[name: '*/main']],
+                            userRemoteConfigs: [[url: 'https://github.com/giosassis/gfit-frontend']],
+                            credentialsId: credentialsId])
                 }
             }
         }
